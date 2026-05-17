@@ -1,9 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:math' as math;
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:audioplayers/audioplayers.dart';
+
 import 'date_counter.dart';
 
 class Invitation extends StatefulWidget {
@@ -14,7 +16,8 @@ class Invitation extends StatefulWidget {
   State<Invitation> createState() => _InvitationState();
 }
 
-class _InvitationState extends State<Invitation> with TickerProviderStateMixin {
+class _InvitationState extends State<Invitation>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController _fadeController;
   late AnimationController _lanternController;
   late AnimationController _petalController;
@@ -24,11 +27,12 @@ class _InvitationState extends State<Invitation> with TickerProviderStateMixin {
   bool _isPlaying = false;
 
   final List<Petal> _petals = [];
-  final DateTime _weddingDate = DateTime(2026, 6, 7, 12, 0, 0);
+  final DateTime _weddingDate = DateTime(2026, 6, 7, 12, 30, 0);
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     // Main entrance fade animations
     _fadeController = AnimationController(
@@ -193,44 +197,6 @@ class _InvitationState extends State<Invitation> with TickerProviderStateMixin {
                 ),
               ),
 
-              // Floating rotating gold music disc/note controller
-              Positioned(
-                top: 24,
-                right: 24,
-                child: FadeTransition(
-                  opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-                    CurvedAnimation(
-                      parent: _fadeController,
-                      curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
-                    ),
-                  ),
-                  child: AnimatedBuilder(
-                    animation: _petalController,
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _isPlaying
-                            ? _petalController.value * 2 * math.pi
-                            : 0,
-                        child: FloatingActionButton.small(
-                          onPressed: _togglePlay,
-                          backgroundColor: Colors.white.withOpacity(0.9),
-                          foregroundColor: const Color(0xFFD4AF37),
-                          shape: const CircleBorder(
-                            side: BorderSide(
-                                color: Color(0xFFD4AF37), width: 1.5),
-                          ),
-                          elevation: 4,
-                          child: Icon(
-                            _isPlaying ? Icons.music_note : Icons.music_off,
-                            size: 20,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-
               // Elegant swaying lanterns
               Positioned(
                 top: 0,
@@ -334,7 +300,8 @@ class _InvitationState extends State<Invitation> with TickerProviderStateMixin {
                             image: const DecorationImage(
                               image: AssetImage('assets/images/bg.png'),
                               fit: BoxFit.cover,
-                              opacity: 0.15, // Blends elegantly without overpowering the golden text
+                              opacity:
+                                  0.8, // Blends elegantly without overpowering the golden text
                             ),
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: [
@@ -735,7 +702,7 @@ class _InvitationState extends State<Invitation> with TickerProviderStateMixin {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "From 12:00 PM onwards",
+                                    "From 12:30 PM onwards",
                                     style: TextStyle(
                                       fontFamily: 'Outfit',
                                       fontSize: 14,
@@ -810,6 +777,43 @@ class _InvitationState extends State<Invitation> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
+                  ),
+                ),
+              ),
+              // Floating rotating gold music disc/note controller
+              Positioned(
+                top: 24,
+                right: 24,
+                child: FadeTransition(
+                  opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+                    CurvedAnimation(
+                      parent: _fadeController,
+                      curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
+                    ),
+                  ),
+                  child: AnimatedBuilder(
+                    animation: _petalController,
+                    builder: (context, child) {
+                      return Transform.rotate(
+                        angle: _isPlaying
+                            ? _petalController.value * 2 * math.pi
+                            : 0,
+                        child: FloatingActionButton.small(
+                          onPressed: _togglePlay,
+                          backgroundColor: Colors.white.withOpacity(0.9),
+                          foregroundColor: const Color(0xFFD4AF37),
+                          shape: const CircleBorder(
+                            side: BorderSide(
+                                color: Color(0xFFD4AF37), width: 1.5),
+                          ),
+                          elevation: 4,
+                          child: Icon(
+                            _isPlaying ? Icons.music_note : Icons.music_off,
+                            size: 20,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
