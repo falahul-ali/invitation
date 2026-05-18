@@ -169,6 +169,21 @@ class _InvitationState extends State<Invitation>
     }
   }
 
+  Future<void> _launchWhatsApp() async {
+    const String phone = "94764189477"; // Sri Lanka country code + number
+    const String message =
+        "بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ\n\n"
+        "\"May Allah bless both of you, shower His blessings upon you, and unite you in goodness.\"\n\n"
+        "Congratulations on your Waleema, Falahul Ali & Fathima Ihshana! May your marriage be a source of joy, mercy, and endless barakah. Ameen. 🤍✨";
+    final Uri whatsappUrl =
+        Uri.parse("https://wa.me/$phone?text=${Uri.encodeComponent(message)}");
+    if (await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication)) {
+      // Opened successfully
+    } else {
+      throw 'Could not launch WhatsApp';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -854,38 +869,143 @@ class _InvitationState extends State<Invitation>
                             ),
                             SizedBox(height: 20 * s),
 
-                            // Actions: Venue Map
+                            // Actions: Venue Map + WhatsApp Wishes
                             _buildFadeIn(
                               start: 0.8,
                               end: 1.0,
-                              child: Center(
-                                child: ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF2C4A6F),
-                                    foregroundColor: Colors.white,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 28, vertical: 12 * s),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
+                              child: isMobile
+                                  // ── MOBILE: stacked column ──
+                                  ? Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ElevatedButton.icon(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xFF2C4A6F),
+                                            foregroundColor: Colors.white,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 28,
+                                                vertical: 12 * s),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                            elevation: 4,
+                                            shadowColor: const Color(0xFF2C4A6F)
+                                                .withOpacity(0.3),
+                                          ),
+                                          onPressed: _launchMap,
+                                          icon: const Icon(Icons.map_outlined,
+                                              size: 20),
+                                          label: const Text(
+                                            "VENUE MAP",
+                                            style: TextStyle(
+                                              fontFamily: 'Outfit',
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.5,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 12 * s),
+                                        ElevatedButton.icon(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            foregroundColor:
+                                                const Color(0xFF25D366),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 28,
+                                                vertical: 12 * s),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                            elevation: 4,
+                                            shadowColor: const Color(0xFF25D366)
+                                                .withOpacity(0.3),
+                                          ),
+                                          onPressed: _launchWhatsApp,
+                                          icon: const Icon(Icons.chat_outlined,
+                                              size: 20),
+                                          label: const Text(
+                                            "SEND WISHES",
+                                            style: TextStyle(
+                                              fontFamily: 'Outfit',
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.5,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  // ── DESKTOP: side-by-side row ──
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton.icon(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xFF2C4A6F),
+                                            foregroundColor: Colors.white,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 28,
+                                                vertical: 12 * s),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                            elevation: 4,
+                                            shadowColor: const Color(0xFF2C4A6F)
+                                                .withOpacity(0.3),
+                                          ),
+                                          onPressed: _launchMap,
+                                          icon: const Icon(Icons.map_outlined,
+                                              size: 20),
+                                          label: const Text(
+                                            "VENUE MAP",
+                                            style: TextStyle(
+                                              fontFamily: 'Outfit',
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.5,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        ElevatedButton.icon(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            foregroundColor:
+                                                const Color(0xFFafc0d2),
+                                            // const Color(0xFF25D366),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 28,
+                                                vertical: 12 * s),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                            elevation: 4,
+                                            shadowColor: const Color(0xFFafc0d2)
+                                                .withOpacity(0.3),
+                                          ),
+                                          onPressed: _launchWhatsApp,
+                                          icon: const Icon(Icons.chat_outlined,
+                                              size: 20),
+                                          label: const Text(
+                                            "SEND WISHES",
+                                            style: TextStyle(
+                                              fontFamily: 'Outfit',
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.5,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    elevation: 4,
-                                    shadowColor: const Color(0xFF2C4A6F)
-                                        .withOpacity(0.3),
-                                  ),
-                                  onPressed: _launchMap,
-                                  icon:
-                                      const Icon(Icons.map_outlined, size: 20),
-                                  label: const Text(
-                                    "VENUE MAP",
-                                    style: TextStyle(
-                                      fontFamily: 'Outfit',
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1.5,
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ),
                           ],
                         ),
