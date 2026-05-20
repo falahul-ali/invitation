@@ -579,72 +579,95 @@ class _InvitationState extends State<Invitation>
                                     ),
                             ),
                             // Host Greeting — joint invitation from both families
-                            // Only shown when a guest name is provided (personalised link)
-                            if (widget.guestName.isNotEmpty) ...[
-                              SizedBox(height: 6 * s),
-                              _buildFadeIn(
-                                start: 0.35,
-                                end: 0.65,
-                                child: Text(
-                                  "We Together request the pleasure of the company of",
-                                  style: TextStyle(
-                                    fontFamily: 'AlexBrush',
-                                    fontSize: 18 * s,
-                                    color: Color(0xFF7B9EC1),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              SizedBox(height: 12 * s),
+                            SizedBox(height: 6 * s),
 
-                              // Personalized Guest Name
-                              _buildFadeIn(
-                                start: 0.4,
-                                end: 0.7,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 8 * s, horizontal: 24),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: const Color(0xFFD4AF37)
-                                            .withOpacity(0.5),
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                  ),
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      widget.guestName.toUpperCase(),
-                                      style: TextStyle(
-                                        fontFamily: 'Outfit',
-                                        fontSize: 18 * s,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFFD4AF37),
-                                        letterSpacing: 1.5,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
+                            _buildFadeIn(
+                              start: 0.35,
+                              end: 0.65,
+                              child: Text(
+                                "We Together request the pleasure of the company of",
+                                style: TextStyle(
+                                  fontFamily: 'AlexBrush',
+                                  fontSize: 18 * s,
+                                  color: Color(0xFF7B9EC1),
                                 ),
+                                textAlign: TextAlign.center,
                               ),
-                              SizedBox(height: 8 * s),
+                            ),
+                            SizedBox(height: 12 * s),
 
-                              _buildFadeIn(
-                                start: 0.45,
-                                end: 0.75,
-                                child: Text(
-                                  "on the occasion of the",
-                                  style: TextStyle(
-                                    fontFamily: 'Outfit',
-                                    fontSize: 12 * s,
-                                    color: Color(0xFF2C4A6F),
-                                  ),
+                            // Personalized Guest Greeting / Greeting placeholder
+                            _buildFadeIn(
+                              start: 0.4,
+                              end: 0.7,
+                              child: widget.guestName.isNotEmpty
+                                  ? Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 8 * s, horizontal: 24),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: const Color(0xFFD4AF37)
+                                                .withOpacity(0.5),
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                      ),
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          widget.guestName.toUpperCase(),
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 18 * s,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xFFD4AF37),
+                                            letterSpacing: 1.5,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "MR. & MRS./MS.",
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 12 * s,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF7B9EC1),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          "......................................................................",
+                                          style: TextStyle(
+                                            color: const Color(0xFF7B9EC1)
+                                                .withOpacity(0.4),
+                                            letterSpacing: 1.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                            SizedBox(height: 8 * s),
+
+                            _buildFadeIn(
+                              start: 0.45,
+                              end: 0.75,
+                              child: Text(
+                                "on the occasion of the",
+                                style: TextStyle(
+                                  fontFamily: 'Outfit',
+                                  fontSize: 12 * s,
+                                  color: Color(0xFF2C4A6F),
                                 ),
                               ),
-                              SizedBox(height: 6 * s),
-                            ],
+                            ),
+                            SizedBox(height: 6 * s),
 
                             // Waleema Ceremony Title
                             _buildFadeIn(
