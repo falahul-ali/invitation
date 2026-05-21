@@ -1,6 +1,5 @@
+import 'package:ali_wed_invitation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-
-import 'screens/invitation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: Invitation(guestName: guestName),
+      home: SplashScreen(guestName: guestName),
     );
   }
 

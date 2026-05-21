@@ -326,7 +326,7 @@ class _InvitationState extends State<Invitation>
                     // ── MOBILE: fixed to screen height, scale to fit, no scroll ──
                     ? Container(
                         margin: EdgeInsets.symmetric(vertical: 10),
-                        width: size.width,
+                        width: size.width * 0.95,
                         height: size.height,
                         child: FittedBox(
                           fit: BoxFit.contain,
