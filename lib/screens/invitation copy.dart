@@ -2,10 +2,11 @@
 
 import 'dart:math' as math;
 
-import 'package:ali_wed_invitation/screens/date_counter.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'date_counter.dart';
 
 class Invitation extends StatefulWidget {
   final String guestName;
@@ -168,11 +169,25 @@ class _InvitationState extends State<Invitation>
     }
   }
 
+  Future<void> _launchWhatsApp() async {
+    const String phone = "94772960134"; // Sri Lanka country code + number
+    const String message =
+        "بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ\n\n"
+        "\"May Allah bless both of you, shower His blessings upon you, and unite you in goodness.\"\n\n"
+        "Congratulations on your Waleema, Falahul Ali & Fathima Ihshana! May your marriage be a source of joy, mercy, and endless barakah. Ameen. 🤍✨";
+    final Uri whatsappUrl =
+        Uri.parse("https://wa.me/$phone?text=${Uri.encodeComponent(message)}");
+    if (await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication)) {
+      // Opened successfully
+    } else {
+      throw 'Could not launch WhatsApp';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 800;
-    final isLandscape = size.width > size.height; // desktop landscape
     // Scale factor: 1.0 at 800px tall, shrinks on shorter screens, caps on tall ones
     final double s = (size.height / 500).clamp(0.55, 1.15);
 
@@ -312,9 +327,7 @@ class _InvitationState extends State<Invitation>
                       EdgeInsets.symmetric(vertical: 16 * s, horizontal: 20),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: isLandscape
-                          ? (size.width * 0.88).clamp(0, 1000)
-                          : (isMobile ? size.width * 0.92 : 620),
+                      maxWidth: isMobile ? size.width * 0.92 : 620,
                     ),
                     child: AnimatedBuilder(
                       animation: _shimmerController,
@@ -354,9 +367,561 @@ class _InvitationState extends State<Invitation>
                           vertical: (isMobile ? 20 : 28) * s,
                           horizontal: isMobile ? 20 : 40,
                         ),
-                        child: isLandscape
-                            ? _buildLandscapeLayout(s)
-                            : _buildPortraitLayout(s, isMobile),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Arabic Calligraphy Reveal Animation
+                            FadeTransition(
+                              opacity:
+                                  Tween<double>(begin: 0.0, end: 1.0).animate(
+                                CurvedAnimation(
+                                  parent: _fadeController,
+                                  curve: const Interval(0.0, 0.4,
+                                      curve: Curves.easeIn),
+                                ),
+                              ),
+                              child: ScaleTransition(
+                                scale: Tween<double>(begin: 0.95, end: 1.0)
+                                    .animate(
+                                  CurvedAnimation(
+                                    parent: _fadeController,
+                                    curve: const Interval(0.0, 0.4,
+                                        curve: Curves.easeOut),
+                                  ),
+                                ),
+                                child: Text(
+                                  "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+                                  style: TextStyle(
+                                    fontFamily: 'Scheherazade',
+                                    fontSize: 28 * s,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2C4A6F),
+                                    letterSpacing: 0.5,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8 * s),
+
+                            // Subtitle: In the name of Allah
+                            _buildFadeIn(
+                              start: 0.2,
+                              end: 0.5,
+                              child: Text(
+                                "IN THE NAME OF ALLAH,\nTHE MOST BENEFICENT AND MOST MERCIFUL",
+                                style: TextStyle(
+                                  fontFamily: 'Outfit',
+                                  fontSize: 9 * s,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF7B9EC1),
+                                  letterSpacing: 2.0,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(height: 16 * s),
+                            // Groom and Bride Details — Row on desktop, Column on mobile
+                            _buildFadeIn(
+                              start: 0.52,
+                              end: 0.88,
+                              child: isMobile
+                                  // ── MOBILE: stacked column ──
+                                  ? Column(
+                                      children: [
+                                        FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            "Falahul Ali",
+                                            style: TextStyle(
+                                              fontFamily: 'AlexBrush',
+                                              fontSize: 44 * s,
+                                              color: Color(0xFF2C4A6F),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Son of Late Mr. M.J Ismath\n& Mrs. M.J Ismath",
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 11 * s,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0xFF7B9EC1),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(height: 6 * s),
+                                        Text(
+                                          "&",
+                                          style: TextStyle(
+                                            fontFamily: 'AlexBrush',
+                                            fontSize: 24 * s,
+                                            color: Color(0xFFD4AF37),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6 * s),
+                                        FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            "Fathima Ihshana",
+                                            style: TextStyle(
+                                              fontFamily: 'AlexBrush',
+                                              fontSize: 44 * s,
+                                              color: Color(0xFF2C4A6F),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Daughter of Mr. & Mrs. M. Mohideen",
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 11 * s,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0xFF7B9EC1),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+                                  // ── DESKTOP: side-by-side row ──
+                                  : IntrinsicHeight(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          // Groom side
+                                          Expanded(
+                                            flex: 3,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "Falahul Ali",
+                                                  style: TextStyle(
+                                                    fontFamily: 'AlexBrush',
+                                                    fontSize: 36 * s,
+                                                    color: Color(0xFF2C4A6F),
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                  // maxLines: 1,
+                                                  // overflow:
+                                                  //     TextOverflow.ellipsis,
+                                                ),
+                                                Text(
+                                                  "Son of Late Mr. M.J Ismath\n& Mrs. M.J Ismath",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Outfit',
+                                                    fontSize: 11 * s,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xFF7B9EC1),
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          // Ampersand divider
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 12 * s),
+                                            child: Text(
+                                              "&",
+                                              style: TextStyle(
+                                                fontFamily: 'AlexBrush',
+                                                fontSize: 28 * s,
+                                                color: Color(0xFFD4AF37),
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                          // Bride side
+                                          Expanded(
+                                            flex: 4,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "Fathima Ihshana",
+                                                  style: TextStyle(
+                                                    fontFamily: 'AlexBrush',
+                                                    fontSize: 36 * s,
+                                                    color: Color(0xFF2C4A6F),
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                  // maxLines: 1,
+                                                  // overflow:
+                                                  //     TextOverflow.ellipsis,
+                                                ),
+                                                Text(
+                                                  "Daughter of\nMr. & Mrs. M. Mohideen",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Outfit',
+                                                    fontSize: 11 * s,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xFF7B9EC1),
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                            ),
+                            // Host Greeting — joint invitation from both families
+                            // Only shown when a guest name is provided (personalised link)
+                            if (widget.guestName.isNotEmpty) ...[
+                              SizedBox(height: 6 * s),
+                              _buildFadeIn(
+                                start: 0.35,
+                                end: 0.65,
+                                child: Text(
+                                  "We Together request the pleasure of the company of",
+                                  style: TextStyle(
+                                    fontFamily: 'AlexBrush',
+                                    fontSize: 18 * s,
+                                    color: Color(0xFF7B9EC1),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: 12 * s),
+
+                              // Personalized Guest Name
+                              _buildFadeIn(
+                                start: 0.4,
+                                end: 0.7,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8 * s, horizontal: 24),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: const Color(0xFFD4AF37)
+                                            .withOpacity(0.5),
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                  ),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      widget.guestName.toUpperCase(),
+                                      style: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        fontSize: 18 * s,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFFD4AF37),
+                                        letterSpacing: 1.5,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 8 * s),
+
+                              _buildFadeIn(
+                                start: 0.45,
+                                end: 0.75,
+                                child: Text(
+                                  "on the occasion of the",
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    fontSize: 12 * s,
+                                    color: Color(0xFF2C4A6F),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 6 * s),
+                            ],
+
+                            // Waleema Ceremony Title
+                            _buildFadeIn(
+                              start: 0.5,
+                              end: 0.8,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Wedding Ceremony",
+                                  // "Waleema Ceremony",
+                                  style: TextStyle(
+                                    fontFamily: 'AlexBrush',
+                                    fontSize: 38 * s,
+                                    color: Color(0xFFD4AF37),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // _buildFadeIn(
+                            //   start: 0.52,
+                            //   end: 0.82,
+                            //   child: Text(
+                            //     "Son of Mrs. M.J Ismath",
+                            //     style: TextStyle(
+                            //       fontFamily: 'Outfit',
+                            //       fontSize: 12 * s,
+                            //       color: Color(0xFF7B9EC1),
+                            //     ),
+                            //   ),
+                            // ),
+
+                            // _buildFadeIn(
+                            //   start: 0.62,
+                            //   end: 0.92,
+                            //   child: Text(
+                            //     "Daughter of Mr. & Mrs. M. Mohideen",
+                            //     style: TextStyle(
+                            //       fontFamily: 'Outfit',
+                            //       fontSize: 12 * s,
+                            //       fontWeight: FontWeight.w400,
+                            //       color: Color(0xFF7B9EC1),
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(height: 4 * s),
+                            _buildFadeIn(
+                              start: 0.64,
+                              end: 0.94,
+                              child: Text(
+                                "In sha Allah on",
+                                style: TextStyle(
+                                  fontFamily: 'Outfit',
+                                  fontSize: 12 * s,
+                                  color: Color(0xFF7B9EC1),
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                            // SizedBox(height: 14 * s),
+
+                            // Date display
+                            _buildFadeIn(
+                              start: 0.66,
+                              end: 0.96,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 70,
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        top: BorderSide(
+                                            color: Color(0xFF2C4A6F), width: 1),
+                                        bottom: BorderSide(
+                                            color: Color(0xFF2C4A6F), width: 1),
+                                      ),
+                                    ),
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 6 * s),
+                                    child: Text(
+                                      "SUNDAY",
+                                      style: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        fontSize: 11 * s,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF2C4A6F),
+                                        letterSpacing: 1.0,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "7",
+                                        style: TextStyle(
+                                          fontFamily: 'PlayfairDisplay',
+                                          fontSize: 32 * s,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFFD4AF37),
+                                        ),
+                                      ),
+                                      Text(
+                                        "JUNE",
+                                        style: TextStyle(
+                                          fontFamily: 'Outfit',
+                                          fontSize: 9 * s,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF2C4A6F),
+                                          letterSpacing: 1.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Container(
+                                    width: 70,
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        top: BorderSide(
+                                            color: Color(0xFF2C4A6F), width: 1),
+                                        bottom: BorderSide(
+                                            color: Color(0xFF2C4A6F), width: 1),
+                                      ),
+                                    ),
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 6 * s),
+                                    child: Text(
+                                      "2026",
+                                      style: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        fontSize: 11 * s,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF2C4A6F),
+                                        letterSpacing: 1.0,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 16 * s),
+
+                            // Lunch timing and Venue details
+                            _buildFadeIn(
+                              start: 0.7,
+                              end: 0.98,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "For Lunch",
+                                    style: TextStyle(
+                                      fontFamily: 'Outfit',
+                                      fontSize: 13 * s,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF2C4A6F),
+                                    ),
+                                  ),
+                                  SizedBox(height: 3 * s),
+                                  Text(
+                                    "From 12:30 PM onwards",
+                                    style: TextStyle(
+                                      fontFamily: 'Outfit',
+                                      fontSize: 13 * s,
+                                      color: Color(0xFF2C4A6F),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10 * s),
+                                  Text(
+                                    "At Ilma Reception Hall",
+                                    style: TextStyle(
+                                      fontFamily: 'PlayfairDisplay',
+                                      fontSize: 18 * s,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF2C4A6F),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Mawanella",
+                                    style: TextStyle(
+                                      fontFamily: 'Outfit',
+                                      fontSize: 13 * s,
+                                      color: Color(0xFF7B9EC1),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20 * s),
+
+                            // Countdown DayCounter component
+                            _buildFadeIn(
+                              start: 0.75,
+                              end: 1.0,
+                              child: DayCounter(
+                                  targetDate: _weddingDate, scale: s),
+                            ),
+                            SizedBox(height: 20 * s),
+
+                            // Actions: Venue Map + WhatsApp Wishes — always Row
+                            _buildFadeIn(
+                              start: 0.8,
+                              end: 1.0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFF2C4A6F),
+                                        foregroundColor: Colors.white,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: isMobile ? 16 : 28,
+                                            vertical: 12 * s),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        elevation: 4,
+                                        shadowColor: const Color(0xFF2C4A6F)
+                                            .withOpacity(0.3),
+                                      ),
+                                      onPressed: _launchMap,
+                                      icon: const Icon(Icons.map_outlined,
+                                          size: 20),
+                                      label: Text(
+                                        "VENUE MAP",
+                                        style: TextStyle(
+                                          fontFamily: 'Outfit',
+                                          fontSize: isMobile ? 11 : 13,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1.2,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: isMobile ? 10 : 16),
+                                  Flexible(
+                                    child: ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFFFFFFFF),
+                                        foregroundColor: Color(0xFF2C4A6F),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: isMobile ? 16 : 28,
+                                            vertical: 12 * s),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        elevation: 4,
+                                        shadowColor: const Color(0xFF2C4A6F)
+                                            .withOpacity(0.3),
+                                      ),
+                                      onPressed: _launchWhatsApp,
+                                      icon: const Icon(Icons.chat_outlined,
+                                          size: 20),
+                                      label: Text(
+                                        "SEND WISHES",
+                                        style: TextStyle(
+                                          fontFamily: 'Outfit',
+                                          fontSize: isMobile ? 11 : 13,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1.2,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -402,515 +967,6 @@ class _InvitationState extends State<Invitation>
             ],
           ),
         ));
-  }
-
-  // ── Landscape layout: left panel (identity) + divider + right panel (details) ──
-  Widget _buildLandscapeLayout(double s) {
-    return IntrinsicHeight(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Left panel – who & what
-          Expanded(
-            child: Column(
-              children: [
-                FadeTransition(
-                  opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-                    CurvedAnimation(
-                      parent: _fadeController,
-                      curve: const Interval(0.0, 0.4, curve: Curves.easeIn),
-                    ),
-                  ),
-                  child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.95, end: 1.0).animate(
-                      CurvedAnimation(
-                        parent: _fadeController,
-                        curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
-                      ),
-                    ),
-                    child: Text(
-                      "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-                      style: TextStyle(
-                        fontFamily: 'Scheherazade',
-                        fontSize: 28 * s,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2C4A6F),
-                        letterSpacing: 0.5,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 6 * s),
-                _buildFadeIn(
-                  start: 0.2,
-                  end: 0.5,
-                  child: Text(
-                    "IN THE NAME OF ALLAH,\nTHE MOST BENEFICENT AND MOST MERCIFUL",
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontSize: 9 * s,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF7B9EC1),
-                      letterSpacing: 2.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                _buildFadeIn(
-                  start: 0.35,
-                  end: 0.65,
-                  child: Text(
-                    "We Together Request the pleasure of the company of",
-                    style: TextStyle(
-                      fontFamily: 'AlexBrush',
-                      fontSize: 18 * s,
-                      color: Color(0xFF7B9EC1),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(height: 10 * s),
-                // Guest name
-                _buildFadeIn(
-                  start: 0.4,
-                  end: 0.7,
-                  child: widget.guestName.isNotEmpty
-                      ? Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 8 * s, horizontal: 24),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: const Color(0xFFD4AF37).withOpacity(0.5),
-                                width: 1.5,
-                              ),
-                            ),
-                          ),
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              widget.guestName.toUpperCase(),
-                              style: TextStyle(
-                                fontFamily: 'Outfit',
-                                fontSize: 18 * s,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFFD4AF37),
-                                letterSpacing: 1.5,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "MR. & MRS./MS.",
-                              style: TextStyle(
-                                fontFamily: 'Outfit',
-                                fontSize: 12 * s,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF7B9EC1),
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              "......................................................................",
-                              style: TextStyle(
-                                color: const Color(0xFF7B9EC1).withOpacity(0.4),
-                                letterSpacing: 1.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-                SizedBox(height: 8 * s),
-                _buildFadeIn(
-                  start: 0.45,
-                  end: 0.75,
-                  child: Text(
-                    "on the occasion of the",
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontSize: 12 * s,
-                      color: Color(0xFF2C4A6F),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 4 * s),
-                _buildFadeIn(
-                  start: 0.5,
-                  end: 0.8,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      "Waleema Ceremony",
-                      style: TextStyle(
-                        fontFamily: 'AlexBrush',
-                        fontSize: 38 * s,
-                        color: Color(0xFFD4AF37),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                _buildFadeIn(
-                  start: 0.52,
-                  end: 0.82,
-                  child: Text(
-                    "of",
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontSize: 12 * s,
-                      color: Color(0xFF7B9EC1),
-                    ),
-                  ),
-                ),
-                _buildLeftPanel(s),
-              ],
-            ),
-          ),
-          // Gold vertical divider
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8 * s),
-            child: Container(
-              width: 1.5,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    const Color(0xFFD4AF37).withOpacity(0.1),
-                    const Color(0xFFD4AF37).withOpacity(0.7),
-                    const Color(0xFFD4AF37).withOpacity(0.1),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
-          ),
-          // Right panel – when & where
-          Expanded(
-            child: _buildRightPanel(s),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── Portrait layout: single column (original) ──
-  Widget _buildPortraitLayout(double s, bool isMobile) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ..._buildTopContent(s),
-        ..._buildBottomContent(s),
-      ],
-    );
-  }
-
-  // Left panel content (landscape)
-  Widget _buildLeftPanel(double s) {
-    return Padding(
-      padding: EdgeInsets.only(right: 24 * s),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: _buildTopContent(s),
-      ),
-    );
-  }
-
-  // Right panel content (landscape)
-  Widget _buildRightPanel(double s) {
-    return Padding(
-      padding: EdgeInsets.only(left: 24 * s),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildBottomContent(s),
-      ),
-    );
-  }
-
-  // Shared: top/left content – Bismillah → guest name → couple names
-  List<Widget> _buildTopContent(double s) {
-    return [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                _buildFadeIn(
-                  start: 0.55,
-                  end: 0.85,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      "Falahul Ali",
-                      style: TextStyle(
-                        fontFamily: 'AlexBrush',
-                        fontSize: 44 * s,
-                        color: Color(0xFF2C4A6F),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                // SizedBox(height: 14 * s),
-                _buildFadeIn(
-                  start: 0.3,
-                  end: 0.6,
-                  child: Text(
-                    "Son of Late Mr. M.J Ismath & Mrs. M.J Ismath",
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontSize: 12 * s,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF2C4A6F),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Spacer(),
-          SizedBox(height: 5 * s),
-          _buildFadeIn(
-            start: 0.58,
-            end: 0.88,
-            child: Text(
-              "&",
-              style: TextStyle(
-                fontFamily: 'AlexBrush',
-                fontSize: 24 * s,
-                color: Color(0xFFD4AF37),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          // Spacer(),
-          Expanded(
-            child: Column(
-              children: [
-                _buildFadeIn(
-                  start: 0.6,
-                  end: 0.9,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      "Fathima Ihshana",
-                      style: TextStyle(
-                        fontFamily: 'AlexBrush',
-                        fontSize: 44 * s,
-                        color: Color(0xFF2C4A6F),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                _buildFadeIn(
-                  start: 0.62,
-                  end: 0.92,
-                  child: Text(
-                    "Daughter of Mr. & Mrs. M. Mohideen",
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontSize: 12 * s,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF2C4A6F),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ];
-  }
-
-  // Shared: bottom/right content – date → venue → countdown → button
-  List<Widget> _buildBottomContent(double s) {
-    return [
-      _buildFadeIn(
-        start: 0.64,
-        end: 0.94,
-        child: Text(
-          "In sha Allah on",
-          style: TextStyle(
-            fontFamily: 'Outfit',
-            fontSize: 12 * s,
-            color: Color(0xFF7B9EC1),
-            fontStyle: FontStyle.italic,
-          ),
-        ),
-      ),
-      SizedBox(height: 12 * s),
-      // Date display
-      _buildFadeIn(
-        start: 0.66,
-        end: 0.96,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 70,
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Color(0xFF2C4A6F), width: 1),
-                  bottom: BorderSide(color: Color(0xFF2C4A6F), width: 1),
-                ),
-              ),
-              padding: EdgeInsets.symmetric(vertical: 6 * s),
-              child: Text(
-                "SUNDAY",
-                style: TextStyle(
-                  fontFamily: 'Outfit',
-                  fontSize: 11 * s,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2C4A6F),
-                  letterSpacing: 1.0,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(width: 15),
-            Column(
-              children: [
-                Text(
-                  "7",
-                  style: TextStyle(
-                    fontFamily: 'PlayfairDisplay',
-                    fontSize: 32 * s,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFD4AF37),
-                  ),
-                ),
-                Text(
-                  "JUNE",
-                  style: TextStyle(
-                    fontFamily: 'Outfit',
-                    fontSize: 9 * s,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2C4A6F),
-                    letterSpacing: 1.0,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 15),
-            Container(
-              width: 70,
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Color(0xFF2C4A6F), width: 1),
-                  bottom: BorderSide(color: Color(0xFF2C4A6F), width: 1),
-                ),
-              ),
-              padding: EdgeInsets.symmetric(vertical: 6 * s),
-              child: Text(
-                "2026",
-                style: TextStyle(
-                  fontFamily: 'Outfit',
-                  fontSize: 11 * s,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2C4A6F),
-                  letterSpacing: 1.0,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-      SizedBox(height: 14 * s),
-      // Venue details
-      _buildFadeIn(
-        start: 0.7,
-        end: 0.98,
-        child: Column(
-          children: [
-            Text(
-              "For Lunch",
-              style: TextStyle(
-                fontFamily: 'Outfit',
-                fontSize: 13 * s,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF2C4A6F),
-              ),
-            ),
-            SizedBox(height: 3 * s),
-            Text(
-              "From 12:30 PM onwards",
-              style: TextStyle(
-                fontFamily: 'Outfit',
-                fontSize: 13 * s,
-                color: Color(0xFF2C4A6F),
-              ),
-            ),
-            SizedBox(height: 8 * s),
-            Text(
-              "At Ilma Reception Hall",
-              style: TextStyle(
-                fontFamily: 'PlayfairDisplay',
-                fontSize: 18 * s,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF2C4A6F),
-              ),
-            ),
-            Text(
-              "Mawanella",
-              style: TextStyle(
-                fontFamily: 'Outfit',
-                fontSize: 13 * s,
-                color: Color(0xFF7B9EC1),
-              ),
-            ),
-          ],
-        ),
-      ),
-      SizedBox(height: 16 * s),
-      // Countdown
-      _buildFadeIn(
-        start: 0.75,
-        end: 1.0,
-        child: DayCounter(targetDate: _weddingDate, scale: s),
-      ),
-      SizedBox(height: 16 * s),
-      // Map button
-      _buildFadeIn(
-        start: 0.8,
-        end: 1.0,
-        child: Center(
-          child: ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2C4A6F),
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12 * s),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              elevation: 4,
-              shadowColor: const Color(0xFF2C4A6F).withOpacity(0.3),
-            ),
-            onPressed: _launchMap,
-            icon: const Icon(Icons.map_outlined, size: 20),
-            label: const Text(
-              "VENUE MAP",
-              style: TextStyle(
-                fontFamily: 'Outfit',
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.5,
-              ),
-            ),
-          ),
-        ),
-      ),
-    ];
   }
 
   // Animation builder helper
