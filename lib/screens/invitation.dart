@@ -1266,10 +1266,20 @@ class _InvitationState extends State<Invitation>
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
+                                              "2026",
+                                              style: TextStyle(
+                                                fontFamily: 'Outfit',
+                                                fontSize: 11 * s,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF2C4A6F),
+                                                letterSpacing: 1.0,
+                                              ),
+                                            ),
+                                            Text(
                                               "7",
                                               style: TextStyle(
                                                 fontFamily: 'PlayfairDisplay',
-                                                fontSize: 32 * s,
+                                                fontSize: 37 * s,
                                                 fontWeight: FontWeight.bold,
                                                 color: Color(0xFFD4AF37),
                                               ),
@@ -1302,7 +1312,7 @@ class _InvitationState extends State<Invitation>
                                           padding: EdgeInsets.symmetric(
                                               vertical: 6 * s),
                                           child: Text(
-                                            "2026",
+                                            "LUNCH",
                                             style: TextStyle(
                                               fontFamily: 'Outfit',
                                               fontSize: 11 * s,
@@ -1322,16 +1332,16 @@ class _InvitationState extends State<Invitation>
                                     end: 0.98,
                                     child: Column(
                                       children: [
-                                        Text(
-                                          "For Lunch",
-                                          style: TextStyle(
-                                            fontFamily: 'Outfit',
-                                            fontSize: 13 * s,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFF2C4A6F),
-                                          ),
-                                        ),
-                                        SizedBox(height: 3 * s),
+                                        // Text(
+                                        //   "For Lunch",
+                                        //   style: TextStyle(
+                                        //     fontFamily: 'Outfit',
+                                        //     fontSize: 13 * s,
+                                        //     fontWeight: FontWeight.bold,
+                                        //     color: Color(0xFF2C4A6F),
+                                        //   ),
+                                        // ),
+                                        // SizedBox(height: 3 * s),
                                         Text(
                                           "From 12:30 PM onwards",
                                           style: TextStyle(

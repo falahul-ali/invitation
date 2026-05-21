@@ -188,18 +188,18 @@ class _SplashScreenState extends State<SplashScreen>
             ),
 
             // ── Soft dark overlay so text is readable ────────────────────
-            // Container(
-            //   decoration: BoxDecoration(
-            //     gradient: LinearGradient(
-            //       colors: [
-            //         Colors.black.withOpacity(0.18),
-            //         Colors.black.withOpacity(0.42),
-            //       ],
-            //       begin: Alignment.topCenter,
-            //       end: Alignment.bottomCenter,
-            //     ),
-            //   ),
-            // ),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.0),
+                    Color(0xFF2C4A6F).withOpacity(0.8),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
 
             // ── Floating petals ──────────────────────────────────────────
             IgnorePointer(
@@ -243,26 +243,37 @@ class _SplashScreenState extends State<SplashScreen>
                         child: Column(
                           children: [
                             Text(
-                              "A moment written in the stars,",
+                              "Some souls are chosen to witness the most beautiful chapter of our life. You are one of them.",
                               style: TextStyle(
                                 fontFamily: 'AlexBrush',
-                                fontSize: 22,
-                                color: Colors.white.withOpacity(0.92),
+                                fontSize: 25,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
                                 letterSpacing: 0.5,
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "sealed with love & blessed by Allah.",
-                              style: TextStyle(
-                                fontFamily: 'AlexBrush',
-                                fontSize: 22,
-                                color: Colors.white.withOpacity(0.92),
-                                letterSpacing: 0.5,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
+                            // Text(
+                            //   "A moment written in the stars,",
+                            //   style: TextStyle(
+                            //     fontFamily: 'AlexBrush',
+                            //     fontSize: 22,
+                            //     color: Colors.white.withOpacity(0.92),
+                            //     letterSpacing: 0.5,
+                            //   ),
+                            //   textAlign: TextAlign.center,
+                            // ),
+                            // const SizedBox(height: 4),
+                            // Text(
+                            //   "sealed with love & blessed by Allah.",
+                            //   style: TextStyle(
+                            //     fontFamily: 'AlexBrush',
+                            //     fontSize: 22,
+                            //     color: Colors.white.withOpacity(0.92),
+                            //     letterSpacing: 0.5,
+                            //   ),
+                            //   textAlign: TextAlign.center,
+                            // ),
                           ],
                         ),
                       ),
@@ -284,17 +295,22 @@ class _SplashScreenState extends State<SplashScreen>
                           );
                         },
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 48),
-                          child: Text(
-                            "✦  touch anywhere to unveil  ✦",
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFFD4AF37).withOpacity(0.9),
-                              letterSpacing: 2.2,
-                            ),
-                            textAlign: TextAlign.center,
+                          padding: const EdgeInsets.only(bottom: 28),
+                          child: Column(
+                            children: [
+                              Text(
+                                "✦  touch anywhere to unveil  ✦",
+                                style: TextStyle(
+                                  fontFamily: 'Outfit',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  // color: Colors.white,
+                                  color: const Color(0xFF2C4A6F),
+                                  letterSpacing: 2.2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
                       ),
