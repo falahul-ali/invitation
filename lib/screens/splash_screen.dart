@@ -188,18 +188,18 @@ class _SplashScreenState extends State<SplashScreen>
             ),
 
             // ── Soft dark overlay so text is readable ────────────────────
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black.withOpacity(0.18),
-                    Colors.black.withOpacity(0.42),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     gradient: LinearGradient(
+            //       colors: [
+            //         Colors.black.withOpacity(0.18),
+            //         Colors.black.withOpacity(0.42),
+            //       ],
+            //       begin: Alignment.topCenter,
+            //       end: Alignment.bottomCenter,
+            //     ),
+            //   ),
+            // ),
 
             // ── Floating petals ──────────────────────────────────────────
             IgnorePointer(
@@ -221,17 +221,17 @@ class _SplashScreenState extends State<SplashScreen>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   // ── Envelope ────────────────────────────────────────────
-                  AnimatedBuilder(
-                    animation: _openController,
-                    builder: (context, _) {
-                      return _EnvelopeWidget(
-                        flapAngle: _flapAngle.value,
-                        cardRise: _cardRise.value,
-                      );
-                    },
-                  ),
+                  // AnimatedBuilder(
+                  //   animation: _openController,
+                  //   builder: (context, _) {
+                  //     return _EnvelopeWidget(
+                  //       flapAngle: _flapAngle.value,
+                  //       cardRise: _cardRise.value,
+                  //     );
+                  //   },
+                  // ),
 
-                  const SizedBox(height: 36),
+                  // const SizedBox(height: 36),
 
                   // ── Magical sentence ─────────────────────────────────────
                   FadeTransition(
