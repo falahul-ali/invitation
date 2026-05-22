@@ -64,4 +64,4 @@ flutter:
     - family: Scheherazade
       fonts:
         - asset: assets/fonts/ScheherazadeNew-Regular.ttf
-          weight: 400
+          weight: 700
