@@ -50,15 +50,90 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
+  <!-- Loading screen shown immediately while Flutter engine boots.
+       Removed automatically on the first Flutter frame via the
+       'flutter-first-frame' event. -->
+  <div id="loading-screen" style="
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(160deg, #0d1b2a 0%, #1a2e45 60%, #0d1b2a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-family: Georgia, serif;
+  ">
+    <!-- Logo / monogram -->
+    <div style="
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid rgba(212,175,55,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      animation: pulse-ring 2s ease-in-out infinite;
+    ">
+      <img src="logo.png" alt="" style="width:60px;height:60px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none'">
+    </div>
 
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+    <!-- Names -->
+    <div style="
+      color: #f9e7b9;
+      font-size: 22px;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      text-align: center;
+    ">Falahul Ali &amp; Fathima Ihshana</div>
+
+    <!-- Subtitle -->
+    <div style="
+      color: rgba(212,175,55,0.75);
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    ">Waleema Invitation</div>
+
+    <!-- Animated dots -->
+    <div style="display:flex;gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#d4af37;animation:dot-bounce 1.4s ease-in-out infinite 0s;"></span>
+      <span style="width:8px;height:8px;border-radius:50%;background:#d4af37;animation:dot-bounce 1.4s ease-in-out infinite 0.2s;"></span>
+      <span style="width:8px;height:8px;border-radius:50%;background:#d4af37;animation:dot-bounce 1.4s ease-in-out infinite 0.4s;"></span>
+    </div>
+  </div>
+
+  <style>
+    @keyframes pulse-ring {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.3); }
+      50%       { box-shadow: 0 0 0 12px rgba(212,175,55,0); }
+    }
+    @keyframes dot-bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40%            { transform: scale(1.0); opacity: 1.0; }
+    }
+    /* Smooth fade-out when Flutter is ready */
+    #loading-screen.fade-out {
+      transition: opacity 0.5s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+
   <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    // Remove the loading screen once Flutter renders its first frame
+    window.addEventListener('flutter-first-frame', function () {
+      var el = document.getElementById('loading-screen');
+      if (el) {
+        el.classList.add('fade-out');
+        setTimeout(function () { el.remove(); }, 500);
+      }
+    });
+  </script>
 </body>
 </html>
 

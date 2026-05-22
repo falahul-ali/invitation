@@ -150,6 +150,14 @@ class _SplashScreenState extends State<SplashScreen>
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Pre-cache the bg image used on the invitation screen so the transition
+    // is instant rather than showing a blank card while the image loads.
+    precacheImage(const AssetImage('assets/images/bg.png'), context);
+  }
+
   // ── Petals ──────────────────────────────────────────────────────────────────
   void _initPetals() {
     final rng = math.Random();
