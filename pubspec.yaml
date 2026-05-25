@@ -23,18 +23,18 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/logo.png"
+  image_path: "assets/images/logo.webp"
   web:
     generate: true
-    image_path: "assets/images/logo.png"
+    image_path: "assets/images/logo.webp"
     background_color: "#000000"
     theme_color: "#feb800"
   windows:
     generate: true
-    image_path: "assets/images/logo.png"
+    image_path: "assets/images/logo.webp"
   macos:
     generate: true
-    image_path: "assets/images/logo.png"  
+    image_path: "assets/images/logo.webp"  
 
 flutter:
   uses-material-design: true

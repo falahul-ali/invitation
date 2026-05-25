@@ -122,6 +122,11 @@
     }
   </style>
 
+  <!-- Configure Flutter to use HTML renderer instead of CanvasKit for faster first load -->
+  <script>
+    window.flutterWebRenderer = "html";
+  </script>
+
   <script src="flutter_bootstrap.js" async></script>
 
   <script>

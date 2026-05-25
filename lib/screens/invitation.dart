@@ -340,7 +340,8 @@ class _InvitationState extends State<Invitation>
                                   decoration: BoxDecoration(
                                     color: Colors.white.withOpacity(0.92),
                                     image: const DecorationImage(
-                                      image: AssetImage('assets/images/bg.png'),
+                                      image:
+                                          AssetImage('assets/images/bg.webp'),
                                       fit: BoxFit.cover,
                                       opacity: 0.8,
                                     ),
@@ -969,7 +970,7 @@ class _InvitationState extends State<Invitation>
                                 decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(0.92),
                                   image: const DecorationImage(
-                                    image: AssetImage('assets/images/bg.png'),
+                                    image: AssetImage('assets/images/bg.webp'),
                                     fit: BoxFit.cover,
                                     opacity: 0.8,
                                   ),

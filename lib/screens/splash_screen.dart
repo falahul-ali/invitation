@@ -155,7 +155,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.didChangeDependencies();
     // Pre-cache the bg image used on the invitation screen so the transition
     // is instant rather than showing a blank card while the image loads.
-    precacheImage(const AssetImage('assets/images/bg.png'), context);
+    precacheImage(const AssetImage('assets/images/bg.webp'), context);
   }
 
   // ── Petals ──────────────────────────────────────────────────────────────────
@@ -289,7 +289,7 @@ class _SplashScreenState extends State<SplashScreen>
           fit: StackFit.expand,
           children: [
             // ── Cover image ───────────────────────────────────────────────
-            Image.asset('assets/images/cover.png', fit: BoxFit.cover),
+            Image.asset('assets/images/cover.webp', fit: BoxFit.cover),
 
             // ── Bottom gradient overlay ───────────────────────────────────
             Container(
