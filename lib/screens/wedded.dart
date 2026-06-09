@@ -16,14 +16,13 @@ class _WeddedState extends State<Wedded>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController _fadeController;
   late AnimationController _lanternController;
-  late AnimationController _petalController;
   late AnimationController _shimmerController;
+  late AnimationController _petalController;
+
+  final List<_Petal> _petals = [];
 
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
-
-  final List<Petal> _petals = [];
-  // final DateTime _weddingDate = DateTime(2026, 6, 7, 12, 30, 0);
 
   @override
   void initState() {
@@ -53,12 +52,9 @@ class _WeddedState extends State<Wedded>
       vsync: this,
       duration: const Duration(seconds: 10),
     )
-      ..addListener(() {
-        _updatePetals();
-      })
+      ..addListener(_updatePetals)
       ..repeat();
-
-    _initializePetals();
+    _initPetals();
 
     // Trigger entrance animation
     _fadeController.forward();
@@ -96,31 +92,32 @@ class _WeddedState extends State<Wedded>
     }
   }
 
-  void _initializePetals() {
-    final random = math.Random();
-    for (int i = 0; i < 20; i++) {
-      _petals.add(Petal(
-        x: random.nextDouble(),
-        y: random.nextDouble() * 2 - 1.0,
-        size: random.nextDouble() * 12 + 6,
-        speed: random.nextDouble() * 0.02 + 0.01,
-        angle: random.nextDouble() * math.pi * 2,
-        wobbleSpeed: random.nextDouble() * 2 + 1,
+  void _initPetals() {
+    final rng = math.Random();
+    for (int i = 0; i < 22; i++) {
+      _petals.add(_Petal(
+        x: rng.nextDouble(),
+        y: rng.nextDouble() * 2 - 1.0,
+        size: rng.nextDouble() * 11 + 5,
+        speed: rng.nextDouble() * 0.018 + 0.008,
+        angle: rng.nextDouble() * math.pi * 2,
+        wobble: rng.nextDouble() * 0.008 + 0.003,
       ));
     }
   }
 
   void _updatePetals() {
-    final random = math.Random();
-    for (var petal in _petals) {
-      petal.y += petal.speed * 0.1;
-      petal.angle += 0.01;
-      if (petal.y > 1.2) {
-        petal.y = -0.2;
-        petal.x = random.nextDouble();
+    final rng = math.Random();
+    for (final p in _petals) {
+      p.y += p.speed * 0.1;
+      p.angle += 0.012;
+      p.x += math.sin(p.angle * 3) * p.wobble;
+      if (p.y > 1.2) {
+        p.y = -0.2;
+        p.x = rng.nextDouble();
       }
     }
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -147,8 +144,8 @@ class _WeddedState extends State<Wedded>
     WidgetsBinding.instance.removeObserver(this);
     _fadeController.dispose();
     _lanternController.dispose();
-    _petalController.dispose();
     _shimmerController.dispose();
+    _petalController.dispose();
     _audioPlayer.stop();
     _audioPlayer.dispose();
     super.dispose();
@@ -307,11 +304,11 @@ class _WeddedState extends State<Wedded>
               //   ),
               // ),
 
-              // Floating Petals
+              // Floating petals over background
               Positioned.fill(
                 child: IgnorePointer(
                   child: CustomPaint(
-                    painter: PetalsPainter(petals: _petals),
+                    painter: _PetalsPainter(petals: _petals),
                   ),
                 ),
               ),
@@ -460,29 +457,22 @@ class _WeddedState extends State<Wedded>
                       curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
                     ),
                   ),
-                  child: AnimatedBuilder(
-                    animation: _petalController,
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _isPlaying
-                            ? _petalController.value * 2 * math.pi
-                            : 0,
-                        child: FloatingActionButton.small(
-                          onPressed: _togglePlay,
-                          backgroundColor: Colors.white.withOpacity(0.9),
-                          foregroundColor: const Color(0xFFD4AF37),
-                          shape: const CircleBorder(
-                            side: BorderSide(
-                                color: Color(0xFFD4AF37), width: 1.5),
-                          ),
-                          elevation: 4,
-                          child: Icon(
-                            _isPlaying ? Icons.music_note : Icons.music_off,
-                            size: 20,
-                          ),
-                        ),
-                      );
-                    },
+                  child: AnimatedRotation(
+                    turns: _isPlaying ? _shimmerController.value : 0,
+                    duration: const Duration(milliseconds: 300),
+                    child: FloatingActionButton.small(
+                      onPressed: _togglePlay,
+                      backgroundColor: Colors.white.withOpacity(0.9),
+                      foregroundColor: const Color(0xFFD4AF37),
+                      shape: const CircleBorder(
+                        side: BorderSide(color: Color(0xFFD4AF37), width: 1.5),
+                      ),
+                      elevation: 4,
+                      child: Icon(
+                        _isPlaying ? Icons.music_note : Icons.music_off,
+                        size: 20,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -513,58 +503,6 @@ class _WeddedState extends State<Wedded>
       ),
     );
   }
-}
-
-// Particle design for floating petals
-class Petal {
-  double x;
-  double y;
-  double size;
-  double speed;
-  double angle;
-  double wobbleSpeed;
-
-  Petal({
-    required this.x,
-    required this.y,
-    required this.size,
-    required this.speed,
-    required this.angle,
-    required this.wobbleSpeed,
-  });
-}
-
-// Custom Painter for Petals Animation
-class PetalsPainter extends CustomPainter {
-  final List<Petal> petals;
-  PetalsPainter({required this.petals});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF7B9EC1).withOpacity(0.2)
-      ..style = PaintingStyle.fill;
-
-    for (var petal in petals) {
-      canvas.save();
-      final offset = Offset(petal.x * size.width, petal.y * size.height);
-      canvas.translate(offset.dx, offset.dy);
-      canvas.rotate(petal.angle);
-
-      // Draw elegant leaf/petal path
-      final path = Path()
-        ..moveTo(0, -petal.size / 2)
-        ..quadraticBezierTo(petal.size / 2, -petal.size / 4, 0, petal.size / 2)
-        ..quadraticBezierTo(
-            -petal.size / 2, -petal.size / 4, 0, -petal.size / 2);
-
-      canvas.drawPath(path, paint);
-      canvas.restore();
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
 // Beautiful crescent moon and stars in background
@@ -718,3 +656,45 @@ class CrescentMoonPainter extends CustomPainter {
 //   @override
 //   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 // }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Petals (copied from SplashScreen)
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _Petal {
+  double x, y, size, speed, angle, wobble;
+  _Petal({
+    required this.x,
+    required this.y,
+    required this.size,
+    required this.speed,
+    required this.angle,
+    required this.wobble,
+  });
+}
+
+class _PetalsPainter extends CustomPainter {
+  final List<_Petal> petals;
+  _PetalsPainter({required this.petals});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    for (final p in petals) {
+      paint.color =
+          const Color(0xFFD4AF37).withOpacity(0.22 + (p.size / 16) * 0.14);
+      canvas.save();
+      canvas.translate(p.x * size.width, p.y * size.height);
+      canvas.rotate(p.angle);
+      final path = Path()
+        ..moveTo(0, -p.size / 2)
+        ..quadraticBezierTo(p.size / 2, 0, 0, p.size / 2)
+        ..quadraticBezierTo(-p.size / 2, 0, 0, -p.size / 2);
+      canvas.drawPath(path, paint);
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_PetalsPainter _) => true;
+}
