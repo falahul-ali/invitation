@@ -1,4 +1,4 @@
-import 'package:ali_wed_invitation/screens/splash_screen.dart';
+import 'package:ali_wed_invitation/screens/wedded.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,10 +12,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Parse guest name from URL query parameters (Flutter Web)
     // For mobile, defaults to a standard greeting
-    String guestName = _getGuestName();
+    // String guestName = _getGuestName();
 
     return MaterialApp(
-      title: 'Waleema Invitation – Falahul Ali & Fathima Ihshana',
+      title: '🤍 Ali & Ihshana - United Forever | Alhamdulillah',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Outfit',
@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: SplashScreen(guestName: guestName),
+      home: Wedded(),
+      // home: SplashScreen(guestName: guestName),
     );
   }
 
